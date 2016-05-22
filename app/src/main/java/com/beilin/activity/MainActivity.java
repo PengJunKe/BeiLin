@@ -1,14 +1,23 @@
 package com.beilin.activity;
 
+import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
 import com.beilin.R;
+import com.beilin.request.TestRequest;
 import com.dd.CircularProgressButton;
 
-public class MainActivity extends BaseActivity {
-    private TextView tv;
+import java.util.List;
 
+/**
+ * Created by Lenovo on 2016/5/22.
+ * @author ChengTao
+ */
+public class MainActivity extends BaseActivity{
+    private CircularProgressButton button;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
@@ -16,29 +25,45 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        final CircularProgressButton circularButton1 = (CircularProgressButton) findViewById(R.id.circularButton1);
-        circularButton1.setIndeterminateProgressMode(true);
-        circularButton1.setOnClickListener(new View.OnClickListener() {
+        button = obtainView(R.id.circularButton1);
+    }
+
+    @Override
+    protected void setListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (circularButton1.getProgress() == 0) {
-                    circularButton1.setProgress(50);
-                } else if (circularButton1.getProgress() == 100) {
-                    circularButton1.setProgress(0);
-                } else {
-                    circularButton1.setProgress(100);
-                }
+                TestRequest request = new TestRequest(mContext);
+                request.setRequestId(1);
+                request.setClassName("SheTuan");
+                getData(request);
             }
         });
     }
 
     @Override
-    protected void setListener() {
+    protected void initData() {
 
     }
 
     @Override
-    protected void initData() {
+    public void onStart(int requestId) {
+        button.setProgress(50);
+        Log.v("info","onStart");
+    }
 
+    @Override
+    public void onFailure(int requestId, AVException e) {
+        Log.v("info","--------onFailure");
+        Log.v("info","--------onFailure"+e+"");
+    }
+
+    @Override
+    public void onSuccess(int requestId, List<AVObject> list) {
+        Log.v("info","onSuccess");
+        button.setProgress(100);
+        button.setProgress(0);
+        Toast.makeText(MainActivity.this, list.toString(), Toast.LENGTH_SHORT).show();
+        Log.v("info",list.toString());
     }
 }
