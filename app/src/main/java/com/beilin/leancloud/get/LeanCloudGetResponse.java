@@ -40,10 +40,8 @@ public class LeanCloudGetResponse extends FindCallback<AVObject> {
     @Override
     public void done(List<AVObject> list, AVException e) {
         if (e == null) {
-            Log.v("info", "sendSuccessMessage");
             getHandler.sendSuccessMessage(request.getRequestId(), list);
         } else {
-            Log.v("info", "sendFailureMessage");
             getHandler.sendFailureMessage(request.getRequestId(), e);
         }
     }

@@ -1,9 +1,11 @@
-package com.beilin.leancloud.get;
+package com.beilin.leancloud.put;
 
 import android.os.Handler;
 
+import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.SaveCallback;
 import com.beilin.leancloud.ILeanCloudListener;
 import com.beilin.request.IRequest;
 
@@ -14,9 +16,9 @@ import com.beilin.request.IRequest;
  *
  * @author ChengTao
  */
-public class LeanCloudGetClient {
-    private AVQuery<AVObject> mAVQuery;
-    private LeanCloudGetHandler handler;
+public class LeanCloudPutClient {
+    private AVObject mAVObject;
+    private LeanCloudPutHandler handler;
 
     /**
      * 构造函数，初始化LeanCloudGetHandler(用于发送消息)和IGetListener(数据接口，用于activity页面做相应的处理)
@@ -24,8 +26,8 @@ public class LeanCloudGetClient {
      * @param handler  主线程的handler
      * @param listener 数据接口
      */
-    public LeanCloudGetClient(Handler handler, ILeanCloudListener listener) {
-        this.handler = new LeanCloudGetHandler(handler, listener);
+    public LeanCloudPutClient(Handler handler, ILeanCloudListener listener) {
+        this.handler = new LeanCloudPutHandler(handler, listener);
     }
 
     /**
@@ -34,7 +36,7 @@ public class LeanCloudGetClient {
      * @param className LeanCloud表名
      */
     public void setClassName(String className) {
-        mAVQuery = new AVQuery<>(className);
+        mAVObject = new AVObject(className);
     }
 
     /**
@@ -42,10 +44,13 @@ public class LeanCloudGetClient {
      *
      * @param request 请求
      */
-    public void getData(IRequest request) {
+    public void putData(IRequest request) {
         if (request != null) {
             handler.sendStartMessage(request.getRequestId());
-            mAVQuery.findInBackground(new LeanCloudGetResponse(request, handler));
+            for (String key:request.getPutDatas().keySet()){
+                mAVObject.put(key,request.getPutDatas().get(key));
+            }
+            mAVObject.saveInBackground(new LeanCloudPutResponse(request,handler));
         }
     }
 }
