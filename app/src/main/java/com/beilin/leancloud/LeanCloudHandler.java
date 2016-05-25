@@ -1,35 +1,37 @@
-package com.beilin.leancloud.insert;
+package com.beilin.leancloud;
 
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
 import com.avos.avoscloud.AVException;
-import com.beilin.leancloud.ILeanCloudListener;
-import com.beilin.leancloud.LeanCloudInsertHandlerInterface;
+import com.avos.avoscloud.AVObject;
+
+import java.util.List;
 
 /**
  * Created by Lenovo on 2016/5/21.
  * <p/>
- * LeanCloudGetHandler类，用于发送消息和处理消息
+ * LeanCloudHandler类，用于发送消息和处理消息
  *
  * @author ChengTao
  */
-public class LeanCloudInsertHandler implements LeanCloudInsertHandlerInterface {
+@SuppressWarnings("ALL")
+public class LeanCloudHandler implements LeanCloudHandlerInterface {
     private static final int START_MESSAGE = 1;//开始消息
     private static final int FAILURE_MESSAGE = 2;//失败消息
     private static final int SUCCESS_MESSAGE = 3;//成功消息
 
-    private PutResponseHandler handler;//自定义Handler
+    private ResponseHandler handler;//自定义Handler
     private ILeanCloudListener listener;//数据接口
 
     /**
-     * 初始化getHandler，和数据接口
+     * 初始化handler，和数据接口
      *
      * @param listener 数据接口
      */
-    public LeanCloudInsertHandler(ILeanCloudListener listener) {
-        this.handler = new PutResponseHandler(Looper.myLooper(), this);
+    public LeanCloudHandler(ILeanCloudListener listener) {
+        this.handler = new ResponseHandler(Looper.myLooper(), this);
         this.listener = listener;
     }
 
@@ -52,7 +54,7 @@ public class LeanCloudInsertHandler implements LeanCloudInsertHandlerInterface {
             case SUCCESS_MESSAGE:
                 response = (Object[]) message.obj;
                 if (response != null) {
-                    listener.onSuccess((Integer) response[0],null);
+                    listener.onSuccess((Integer) response[0], (List<AVObject>) response[1]);
                 } else {
                     listener.onFailure(0, new AVException(0, "请求失败"));
                 }
@@ -79,8 +81,8 @@ public class LeanCloudInsertHandler implements LeanCloudInsertHandlerInterface {
     }
 
     @Override
-    public void sendSuccessMessage(int requestId) {
-        sendMessage(obtainMessage(SUCCESS_MESSAGE, new Object[]{requestId}));
+    public void sendSuccessMessage(int requestId,List<AVObject> list) {
+        sendMessage(obtainMessage(SUCCESS_MESSAGE, new Object[]{requestId,list}));
     }
 
     /**
@@ -110,10 +112,10 @@ public class LeanCloudInsertHandler implements LeanCloudInsertHandlerInterface {
     /**
      * 自定义的Handler类，用于将消息处理交给LeanCloudGetHandler
      */
-    public static class PutResponseHandler extends Handler {
-        private LeanCloudInsertHandler handler;
+    public static class ResponseHandler extends Handler {
+        private LeanCloudHandler handler;
 
-        public PutResponseHandler(Looper looper, LeanCloudInsertHandler handler) {
+        public ResponseHandler(Looper looper, LeanCloudHandler handler) {
             super(looper);
             this.handler = handler;
         }

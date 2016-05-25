@@ -19,13 +19,11 @@ import java.util.List;
  * @author ChengTao
  */
 public class TestAdapter extends BaseAdapter{
-    private Context context;
     private List<SheTuan> list;
     private LayoutInflater layoutInflater;
 
     public TestAdapter(Context context,List<SheTuan> list) {
         this.list = list;
-        this.context = context;
         layoutInflater = LayoutInflater.from(context);
     }
 

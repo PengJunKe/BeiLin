@@ -29,10 +29,6 @@ public abstract class IRequest {
      */
     private int requestId = 0;
     /**
-     * 要保存的数据集合
-     */
-    protected Map<String,Object> putDatas;
-    /**
      * 查找时获取数据的限制个数，默认20个
      */
     private int limit = 10;
@@ -58,20 +54,43 @@ public abstract class IRequest {
         return insertList;
     }
 
+    /**
+     * 要批量删除的数据结合
+     */
+    private List<AVObject> deleteList = new ArrayList<>();
+
+    /**
+     * 将AVObject对象加入删除的数据结合中
+     * @param object 要删除的AVObject对象
+     */
+    public void deleteObjectToList(AVObject object){
+        deleteList.add(object);
+    }
+
+    /**
+     * 获取要删除的AVObject对象的数据结合
+     * @return List<AVObject>要删除的AVObject对象的数据结合
+     */
+    public List<AVObject> getDeleteList() {
+        return deleteList;
+    }
+
+    private AVObject upDateObject;
+
+    public AVObject getUpDateObject() {
+        return upDateObject;
+    }
+
+    public void setUpDateObject(AVObject upDateObject) {
+        this.upDateObject = upDateObject;
+    }
+
     public int getLimit() {
         return limit;
     }
 
     public void setLimit(int limit) {
         this.limit = limit;
-    }
-
-    public void setPutDatas(Map<String, Object> putDatas) {
-        this.putDatas = putDatas;
-    }
-
-    public Map<String, Object> getPutDatas() {
-        return putDatas;
     }
 
     public IRequest(Context context) {
@@ -92,5 +111,9 @@ public abstract class IRequest {
 
     public void setRequestId(int requestId) {
         this.requestId = requestId;
+    }
+
+    public Context getContext() {
+        return context;
     }
 }

@@ -1,4 +1,4 @@
-package com.beilin.leancloud.query;
+package com.beilin.leancloud;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
@@ -10,24 +10,24 @@ import java.util.List;
 /**
  * Created by Lenovo on 2016/5/21.
  * <p/>
- * LeanCloudGetResponse类，用于处理请求成功和失败，
- * 并将消息发送给LeanCloudGetHandler，
- * 将结果交给LeanCloudGetHandler处理
+ * LeanCloudQueryResponse类，用于处理请求成功和失败，
+ * 并将消息发送给LeanCloudHandler，
+ * 将结果交给LeanCloudHandler处理
  *
  * @author ChengTao
  */
 public class LeanCloudQueryResponse extends FindCallback<AVObject> {
     private IRequest request;//请求
-    private LeanCloudQueryHandler getHandler;//自定义的消息处理类
+    private LeanCloudHandler handler;//自定义的消息处理类
 
     /**
-     * 初始化request和getHandler
+     * 初始化request和handler
      * @param request 请求
-     * @param getHandler 自定义的消息处理类
+     * @param handler 自定义的消息处理类
      */
-    public LeanCloudQueryResponse(IRequest request, LeanCloudQueryHandler getHandler) {
+    public LeanCloudQueryResponse(IRequest request, LeanCloudHandler handler) {
         this.request = request;
-        this.getHandler = getHandler;
+        this.handler = handler;
     }
 
     /**
@@ -38,9 +38,9 @@ public class LeanCloudQueryResponse extends FindCallback<AVObject> {
     @Override
     public void done(List<AVObject> list, AVException e) {
         if (e == null) {
-            getHandler.sendSuccessMessage(request.getRequestId(), list);
+            handler.sendSuccessMessage(request.getRequestId(), list);
         } else {
-            getHandler.sendFailureMessage(request.getRequestId(), e);
+            handler.sendFailureMessage(request.getRequestId(), e);
         }
     }
 }

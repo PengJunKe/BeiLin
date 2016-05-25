@@ -22,6 +22,15 @@
             android:textColor="#FFFFFF"
             />
         <com.dd.CircularProgressButton
+            android:id="@+id/btn_update"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            app:cpb_cornerRadius="80dp"
+            app:cpb_textIdle="更新"
+            android:textColor="#FFFFFF"
+            />
+        <com.dd.CircularProgressButton
             android:id="@+id/btn_get"
             android:layout_width="0dp"
             android:layout_weight="1"

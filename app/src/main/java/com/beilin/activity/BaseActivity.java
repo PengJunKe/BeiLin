@@ -11,8 +11,7 @@ import android.widget.Toast;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.beilin.leancloud.ILeanCloudListener;
-import com.beilin.leancloud.query.LeanCloudQueryClient;
-import com.beilin.leancloud.insert.LeanCloudInsertClient;
+import com.beilin.leancloud.LeanCloudClient;
 import com.beilin.request.IRequest;
 
 import java.util.List;
@@ -23,10 +22,18 @@ import java.util.List;
  */
 @SuppressWarnings("ALL")
 public abstract class BaseActivity extends Activity implements ILeanCloudListener{
+    /**
+     * 主线程handler
+     */
     protected Handler mHandler;
+    /**
+     * 本页面上下文
+     */
     protected Context mContext;
-    protected LeanCloudQueryClient mQueryClient = new LeanCloudQueryClient(this);
-    protected LeanCloudInsertClient mInsertClient = new LeanCloudInsertClient(this);
+    /**
+     * LeanCloudClient的实体，用于进行增删改查的操作
+     */
+    protected LeanCloudClient mClient = new LeanCloudClient(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,35 +76,71 @@ public abstract class BaseActivity extends Activity implements ILeanCloudListene
     }
 
     /**
-     * 查找数据
+     * 基本的查找数据
      *
      * @param request 发出的请求
      */
-    protected void queryData(IRequest request) {
-        mQueryClient.setClassName(request.getClassName());
-        mQueryClient.customQuery(request);
+    protected void baseQueryData(IRequest request) {
+        mClient.setClassName(request.getClassName());
+        mClient.baseQuery(request);
     }
 
     /**
-     * 插入数据
+     * 基本的插入数据
      *
      * @param request 发出的请求
      */
-    protected void insertData(IRequest request) {
-        mInsertClient.customInsert(request);
+    protected void baseInsertData(IRequest request) {
+        mClient.baseInsert(request);
     }
 
+    /**
+     * 基本的删除数据
+     *
+     * @param request 发出的请求
+     */
+    protected void deleteData(IRequest request){
+        mClient.baseDelete(request);
+    }
+
+    /**
+     * 基本的更新数据
+     * @param request 发出的请求
+     */
+    protected void baseUpDate(IRequest request){
+        mClient.baseUpdate(request);
+    }
+
+    /**
+     * 默认的请求失败处理
+     * @param requestId 请求Id
+     * @param e 异常
+     */
     @Override
     public void onFailure(int requestId, AVException e) {
-        showToast("网络连接失败，请检查网路");
         Log.v("info","onFailure");
+        Log.v("info","e-------"+e.toString());
+        if (e.getCode() == 1){
+            showToast("您没有权限...");
+        }else {
+            showToast("网络连接失败，请检查网路...");
+        }
     }
 
+    /**
+     * 默认的请求开始处理
+     * @param requestId 请求Id
+     */
     @Override
     public void onStart(int requestId) {
         Log.v("info","onStart");
     }
 
+    /**
+     * 默认的请求成功处理
+     * @param requestId 请求Id
+     * @param list 返回的数据集合
+     */
     @Override
     public void onSuccess(int requestId, List<AVObject> list) {
         Log.v("info","onSuccess");

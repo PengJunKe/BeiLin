@@ -1,6 +1,9 @@
 package com.beilin.entity;
 
 import com.avos.avoscloud.AVObject;
+import com.beilin.activity.BaseActivity;
+
+import java.util.Date;
 
 /**
  * Created by ChengTao on 2016/5/23.
@@ -11,10 +14,16 @@ public class SheTuan extends AVObject{
     public String introduce;
     public String like;
 
-    public SheTuan() {
+    public String getName() {
+        return name;
     }
 
-    public SheTuan(String theClassName) {
-        super(theClassName);
+    public String getIntroduce() {
+        return introduce;
     }
+
+    public String getLike() {
+        return like;
+    }
+
 }
