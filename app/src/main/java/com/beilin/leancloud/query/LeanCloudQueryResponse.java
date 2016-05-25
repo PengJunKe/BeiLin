@@ -1,6 +1,4 @@
-package com.beilin.leancloud.get;
-
-import android.util.Log;
+package com.beilin.leancloud.query;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
@@ -18,16 +16,16 @@ import java.util.List;
  *
  * @author ChengTao
  */
-public class LeanCloudGetResponse extends FindCallback<AVObject> {
+public class LeanCloudQueryResponse extends FindCallback<AVObject> {
     private IRequest request;//请求
-    private LeanCloudGetHandler getHandler;//自定义的消息处理类
+    private LeanCloudQueryHandler getHandler;//自定义的消息处理类
 
     /**
      * 初始化request和getHandler
      * @param request 请求
      * @param getHandler 自定义的消息处理类
      */
-    public LeanCloudGetResponse(IRequest request, LeanCloudGetHandler getHandler) {
+    public LeanCloudQueryResponse(IRequest request, LeanCloudQueryHandler getHandler) {
         this.request = request;
         this.getHandler = getHandler;
     }

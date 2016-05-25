@@ -1,12 +1,8 @@
-package com.beilin.leancloud.put;
+package com.beilin.leancloud.insert;
 
 import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.beilin.request.IRequest;
-
-import java.util.List;
 
 /**
  * Created by Lenovo on 2016/5/21.
@@ -17,16 +13,16 @@ import java.util.List;
  *
  * @author ChengTao
  */
-public class LeanCloudPutResponse extends SaveCallback {
+public class LeanCloudInsertResponse extends SaveCallback {
     private IRequest request;//请求
-    private LeanCloudPutHandler putHandler;//自定义的消息处理类
+    private LeanCloudInsertHandler putHandler;//自定义的消息处理类
 
     /**
      * 初始化request和getHandler
      * @param request 请求
      * @param putHandler 自定义的消息处理类
      */
-    public LeanCloudPutResponse(IRequest request, LeanCloudPutHandler putHandler) {
+    public LeanCloudInsertResponse(IRequest request, LeanCloudInsertHandler putHandler) {
         this.request = request;
         this.putHandler = putHandler;
     }

@@ -1,11 +1,7 @@
-package com.beilin.leancloud.put;
+package com.beilin.leancloud.query;
 
-import android.os.Handler;
-
-import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
-import com.avos.avoscloud.SaveCallback;
 import com.beilin.leancloud.ILeanCloudListener;
 import com.beilin.request.IRequest;
 
@@ -16,18 +12,17 @@ import com.beilin.request.IRequest;
  *
  * @author ChengTao
  */
-public class LeanCloudPutClient {
-    private AVObject mAVObject;
-    private LeanCloudPutHandler handler;
+public class LeanCloudQueryClient {
+    private AVQuery<AVObject> mAVQuery;
+    private LeanCloudQueryHandler handler;
 
     /**
      * 构造函数，初始化LeanCloudGetHandler(用于发送消息)和IGetListener(数据接口，用于activity页面做相应的处理)
      *
-     * @param handler  主线程的handler
      * @param listener 数据接口
      */
-    public LeanCloudPutClient(Handler handler, ILeanCloudListener listener) {
-        this.handler = new LeanCloudPutHandler(handler, listener);
+    public LeanCloudQueryClient(ILeanCloudListener listener) {
+        this.handler = new LeanCloudQueryHandler(listener);
     }
 
     /**
@@ -36,21 +31,18 @@ public class LeanCloudPutClient {
      * @param className LeanCloud表名
      */
     public void setClassName(String className) {
-        mAVObject = new AVObject(className);
+        mAVQuery = new AVQuery<>(className);
     }
 
     /**
-     * 从LeanCloud数据库获取数据
+     * 从LeanCloud数据库查找数据
      *
      * @param request 请求
      */
-    public void putData(IRequest request) {
+    public void customQuery(IRequest request) {
         if (request != null) {
             handler.sendStartMessage(request.getRequestId());
-            for (String key:request.getPutDatas().keySet()){
-                mAVObject.put(key,request.getPutDatas().get(key));
-            }
-            mAVObject.saveInBackground(new LeanCloudPutResponse(request,handler));
+            mAVQuery.findInBackground(new LeanCloudQueryResponse(request, handler));
         }
     }
 }

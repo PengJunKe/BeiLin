@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Lenovo on 2016/5/21.
  * @author ChengTao
  */
-public interface LeanCloudGetHandlerInterface {
+public interface LeanCloudQueryHandlerInterface {
     /**
      * 发送开始消息
       * @param requestId 请求的Id

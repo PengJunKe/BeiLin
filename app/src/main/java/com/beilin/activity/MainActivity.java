@@ -1,6 +1,5 @@
 package com.beilin.activity;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -11,6 +10,7 @@ import com.beilin.R;
 import com.beilin.adapter.TestAdapter;
 import com.beilin.entity.SheTuan;
 import com.beilin.request.TestRequest;
+import com.beilin.tools.Table;
 import com.dd.CircularProgressButton;
 
 import java.util.ArrayList;
@@ -64,9 +64,9 @@ public class MainActivity extends BaseActivity implements
 
     private void fillListView() {
         TestRequest getRequest = new TestRequest(mContext);
-        getRequest.setClassName(SHE_TUAN);
         getRequest.setRequestId(GET_REQUEST);
-        getData(getRequest);
+        getRequest.setClassName(Table.SHE_TUAN);
+        queryData(getRequest);
     }
 
     @Override
@@ -134,14 +134,27 @@ public class MainActivity extends BaseActivity implements
             case R.id.btn_add:
                 btnAdd.setProgress(0);
                 TestRequest addRequest = new TestRequest(mContext);
-                addRequest.setClassName(SHE_TUAN);
                 Map<String,Object> map = new HashMap<>();
                 map.put("like",new Random().nextInt(10));
                 map.put("name","计协");
                 map.put("introduce","北京林业大学计算机与网络协会");
-                addRequest.setPutDatas(map);
+                AVObject object = Table.getSheTuanObject();
+                Table.setData(object,map);
+
+                map.clear();
+                map.put("like",new Random().nextInt(10));
+                map.put("place","图书馆");
+                map.put("content","北京林业大学计算机与网络协会活动");
+
+                AVObject object1 = Table.getHuoDongObject();
+                Table.setData(object1,map);
+
+                addRequest.insertObjectToList(object);
+                addRequest.insertObjectToList(object);
+                addRequest.insertObjectToList(object1);
+                addRequest.insertObjectToList(object1);
                 addRequest.setRequestId(ADD_REQUEST);
-                putData(addRequest);
+                insertData(addRequest);
                 break;
             case R.id.btn_get:
                 btnGet.setProgress(0);

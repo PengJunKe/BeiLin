@@ -1,4 +1,4 @@
-package com.beilin.leancloud.put;
+package com.beilin.leancloud.query;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -7,8 +7,7 @@ import android.os.Message;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.beilin.leancloud.ILeanCloudListener;
-import com.beilin.leancloud.LeanCloudGetHandlerInterface;
-import com.beilin.leancloud.LeanCloudPutHandlerInterface;
+import com.beilin.leancloud.LeanCloudQueryHandlerInterface;
 
 import java.util.List;
 
@@ -19,24 +18,23 @@ import java.util.List;
  *
  * @author ChengTao
  */
-public class LeanCloudPutHandler implements LeanCloudPutHandlerInterface {
+@SuppressWarnings("ALL")
+public class LeanCloudQueryHandler implements LeanCloudQueryHandlerInterface {
     private static final int START_MESSAGE = 1;//开始消息
     private static final int FAILURE_MESSAGE = 2;//失败消息
     private static final int SUCCESS_MESSAGE = 3;//成功消息
 
-    private PutResponseHandler putHandler;//自定义Handler
+    private GetResponseHandler handler;//自定义Handler
     private ILeanCloudListener listener;//数据接口
-    private Handler handler;//主线程的handler
 
     /**
-     * 初始化getHandler，和数据接口
+     * 初始化handler，和数据接口
      *
      * @param handler  主线程的handler
      * @param listener 数据接口
      */
-    public LeanCloudPutHandler(Handler handler, ILeanCloudListener listener) {
-        this.handler = handler;
-        this.putHandler = new PutResponseHandler(handler.getLooper(), this);
+    public LeanCloudQueryHandler(ILeanCloudListener listener) {
+        this.handler = new GetResponseHandler(Looper.myLooper(), this);
         this.listener = listener;
     }
 
@@ -59,7 +57,7 @@ public class LeanCloudPutHandler implements LeanCloudPutHandlerInterface {
             case SUCCESS_MESSAGE:
                 response = (Object[]) message.obj;
                 if (response != null) {
-                    listener.onSuccess((Integer) response[0],null);
+                    listener.onSuccess((Integer) response[0], (List<AVObject>) response[1]);
                 } else {
                     listener.onFailure(0, new AVException(0, "请求失败"));
                 }
@@ -86,8 +84,8 @@ public class LeanCloudPutHandler implements LeanCloudPutHandlerInterface {
     }
 
     @Override
-    public void sendSuccessMessage(int requestId) {
-        sendMessage(obtainMessage(SUCCESS_MESSAGE, new Object[]{requestId}));
+    public void sendSuccessMessage(int requestId, List<AVObject> list) {
+        sendMessage(obtainMessage(SUCCESS_MESSAGE, new Object[]{requestId, list}));
     }
 
     /**
@@ -96,10 +94,10 @@ public class LeanCloudPutHandler implements LeanCloudPutHandlerInterface {
      * @param msg 要发送的message
      */
     protected void sendMessage(Message msg) {
-        if (putHandler == null) {
+        if (handler == null) {
             handleMessage(msg);
         } else {
-            putHandler.sendMessage(msg);
+            handler.sendMessage(msg);
         }
     }
 
@@ -117,10 +115,10 @@ public class LeanCloudPutHandler implements LeanCloudPutHandlerInterface {
     /**
      * 自定义的Handler类，用于将消息处理交给LeanCloudGetHandler
      */
-    public static class PutResponseHandler extends Handler {
-        private LeanCloudPutHandler handler;
+    public static class GetResponseHandler extends Handler {
+        private LeanCloudQueryHandler handler;
 
-        public PutResponseHandler(Looper looper, LeanCloudPutHandler handler) {
+        public GetResponseHandler(Looper looper, LeanCloudQueryHandler handler) {
             super(looper);
             this.handler = handler;
         }

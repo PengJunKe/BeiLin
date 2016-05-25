@@ -10,4 +10,11 @@ public class SheTuan extends AVObject{
     public String name;
     public String introduce;
     public String like;
+
+    public SheTuan() {
+    }
+
+    public SheTuan(String theClassName) {
+        super(theClassName);
+    }
 }

@@ -11,8 +11,8 @@ import android.widget.Toast;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.beilin.leancloud.ILeanCloudListener;
-import com.beilin.leancloud.get.LeanCloudGetClient;
-import com.beilin.leancloud.put.LeanCloudPutClient;
+import com.beilin.leancloud.query.LeanCloudQueryClient;
+import com.beilin.leancloud.insert.LeanCloudInsertClient;
 import com.beilin.request.IRequest;
 
 import java.util.List;
@@ -25,35 +25,8 @@ import java.util.List;
 public abstract class BaseActivity extends Activity implements ILeanCloudListener{
     protected Handler mHandler;
     protected Context mContext;
-    protected LeanCloudGetClient mGetClient;
-    protected LeanCloudPutClient mPutClient;
-
-    //LeanCloud数据库中的表名
-    /**
-     * 社团表名
-     */
-    protected final static String SHE_TUAN = "SheTuan";
-    /**
-     * 报名表名
-     */
-    protected final static String BAO_MING = "BaoMing";
-    /**
-     * 活动表名
-     */
-    protected final static String HUO_DONG = "HuoDong";
-    /**
-     * 视频表名
-     */
-    protected final static String SHI_PIN = "ShiPin";
-    /**
-     * 图片表名
-     */
-    protected final static String TU_PIAN = "TuPian";
-    /**
-     * 消息表名
-     */
-    protected final static String XIAO_XI = "XiaoXi";
-    //LeanCloud数据库中的表名
+    protected LeanCloudQueryClient mQueryClient = new LeanCloudQueryClient(this);
+    protected LeanCloudInsertClient mInsertClient = new LeanCloudInsertClient(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +38,6 @@ public abstract class BaseActivity extends Activity implements ILeanCloudListene
         mHandler = new Handler();
         initView();
         setListener();
-        mGetClient = new LeanCloudGetClient(mHandler, this);
-        mPutClient = new LeanCloudPutClient(mHandler,this);
         initData();
     }
 
@@ -98,28 +69,27 @@ public abstract class BaseActivity extends Activity implements ILeanCloudListene
     }
 
     /**
-     * 获取数据
+     * 查找数据
      *
      * @param request 发出的请求
      */
-    protected void getData(IRequest request) {
-        mGetClient.setClassName(request.getClassName());
-        mGetClient.getData(request);
+    protected void queryData(IRequest request) {
+        mQueryClient.setClassName(request.getClassName());
+        mQueryClient.customQuery(request);
     }
 
     /**
-     * 获取数据
+     * 插入数据
      *
      * @param request 发出的请求
      */
-    protected void putData(IRequest request) {
-        mPutClient.setClassName(request.getClassName());
-        mPutClient.putData(request);
+    protected void insertData(IRequest request) {
+        mInsertClient.customInsert(request);
     }
 
     @Override
     public void onFailure(int requestId, AVException e) {
-        showToast("请求失败");
+        showToast("网络连接失败，请检查网路");
         Log.v("info","onFailure");
     }
 
