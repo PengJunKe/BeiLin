@@ -29,6 +29,8 @@
             app:cpb_cornerRadius="80dp"
             app:cpb_textIdle="更新"
             android:textColor="#FFFFFF"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             />
         <com.dd.CircularProgressButton
             android:id="@+id/btn_get"
@@ -40,8 +42,39 @@
             android:textColor="#FFFFFF"
             />
     </LinearLayout>
-    <ListView
+    <LinearLayout
+        android:layout_marginTop="10dp"
         android:layout_below="@id/ll_container"
+        android:id="@+id/ll_container_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.dd.CircularProgressButton
+            android:id="@+id/btn_file"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            app:cpb_cornerRadius="80dp"
+            app:cpb_textIdle="上传文件"
+            android:textColor="#FFFFFF"
+            />
+        <com.dd.CircularProgressButton
+            android:id="@+id/btn_pic"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            app:cpb_cornerRadius="80dp"
+            app:cpb_textIdle="选择图片"
+            android:textColor="#FFFFFF"
+            />
+    </LinearLayout>
+    <ImageView
+        android:contentDescription="@string/_image"
+        android:layout_below="@id/ll_container_file"
+        android:id="@+id/iv_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp" />
+    <ListView
+        android:layout_below="@id/iv_pic"
         android:layout_marginTop="10dp"
         android:id="@+id/lv_main"
         android:layout_width="match_parent"

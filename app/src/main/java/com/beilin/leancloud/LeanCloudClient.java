@@ -1,5 +1,6 @@
 package com.beilin.leancloud;
 
+import android.os.Handler;
 import android.util.Log;
 
 import com.avos.avoscloud.AVObject;
@@ -85,6 +86,18 @@ public class LeanCloudClient {
         if (request != null) {
             handler.sendStartMessage(request.getRequestId());
             mAVQuery.findInBackground(new LeanCloudQueryResponse(request, handler));
+        }
+    }
+
+    /**
+     *插入有图片的对象
+     * @param request 请求
+     */
+    public void InsertWithFile(IRequest request){
+        if (request != null){
+            handler.sendStartMessage(request.getRequestId());
+            request.getUploadFile().saveInBackground(new LeanCloudResponse(request,handler),
+                    new LeanCloudFileProgressResponse(request,handler));
         }
     }
 }

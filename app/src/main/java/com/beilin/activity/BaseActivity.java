@@ -22,6 +22,7 @@ import java.util.List;
  */
 @SuppressWarnings("ALL")
 public abstract class BaseActivity extends Activity implements ILeanCloudListener{
+    protected String TAG = "info";
     /**
      * 主线程handler
      */
@@ -112,14 +113,22 @@ public abstract class BaseActivity extends Activity implements ILeanCloudListene
     }
 
     /**
+     * 上传有文件的对象
+     * @param request
+     */
+    protected void uploadObjectWithFile(IRequest request){
+        mClient.InsertWithFile(request);
+    }
+
+    /**
      * 默认的请求失败处理
      * @param requestId 请求Id
      * @param e 异常
      */
     @Override
     public void onFailure(int requestId, AVException e) {
-        Log.v("info","onFailure");
-        Log.v("info","e-------"+e.toString());
+        Log.v(TAG,"onFailure");
+        Log.v(TAG,"e-------"+e.toString());
         if (e.getCode() == 1){
             showToast("您没有权限...");
         }else {
@@ -133,7 +142,7 @@ public abstract class BaseActivity extends Activity implements ILeanCloudListene
      */
     @Override
     public void onStart(int requestId) {
-        Log.v("info","onStart");
+        Log.v(TAG,"onStart");
     }
 
     /**
@@ -143,7 +152,17 @@ public abstract class BaseActivity extends Activity implements ILeanCloudListene
      */
     @Override
     public void onSuccess(int requestId, List<AVObject> list) {
-        Log.v("info","onSuccess");
+        Log.v(TAG,"onSuccess");
+    }
+
+    /**
+     * 默认文件上传进度处理
+     * @param requestId 请求Id
+     * @param integer 文件上传进度值
+     */
+    @Override
+    public void onFileProgress(int requestId, Integer integer) {
+        Log.v(TAG,"Progress Num------"+integer);
     }
 
     /**

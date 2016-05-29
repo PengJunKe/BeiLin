@@ -31,4 +31,10 @@ public interface LeanCloudHandlerInterface {
      * @param list 返回的AVObject类型的数据集合
      */
     void sendSuccessMessage(int requestId, List<AVObject> list);
+
+    /**
+     * 发送文件上传进度消息
+     * @param integer 文件上传进度值
+     */
+    void sendFileProgressMessage(int requestId,Integer integer);
 }

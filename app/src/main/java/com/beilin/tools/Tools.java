@@ -1,5 +1,9 @@
 package com.beilin.tools;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
@@ -8,6 +12,9 @@ import android.view.View;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.AVObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * Created by Lenovo on 2016/5/2.
@@ -70,5 +77,21 @@ public class Tools {
             }
         }
         return JSONObject.toJSONString(needObject);
+    }
+
+    /**
+     * 将Bitmap转换成字节数组
+     * @param bitmap Bitmap的图片
+     * @param uri uri地址
+     * @return 字节数组
+     */
+    public static byte[] getByteArrayFromUri(Bitmap bitmap, Uri uri){
+        byte[] result = null;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if (bitmap != null){
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+            result = baos.toByteArray();
+        }
+        return result;
     }
 }

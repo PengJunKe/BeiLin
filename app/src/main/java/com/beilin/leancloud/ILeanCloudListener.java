@@ -30,4 +30,11 @@ public interface ILeanCloudListener {
      * @param list 返回的数据集合
      */
     void onSuccess(int requestId, List<AVObject> list);
+
+    /**
+     * 文件上传进度
+     * @param requestId 请求Id
+     * @param integer 文件上传进度值
+     */
+    void onFileProgress(int requestId,Integer integer);
 }

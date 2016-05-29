@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
+import com.alibaba.fastjson.serializer.BeforeFilter;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 
@@ -21,6 +22,7 @@ public class LeanCloudHandler implements LeanCloudHandlerInterface {
     private static final int START_MESSAGE = 1;//开始消息
     private static final int FAILURE_MESSAGE = 2;//失败消息
     private static final int SUCCESS_MESSAGE = 3;//成功消息
+    private static final int FILE_PROGRESS_MESSAGE = 4;//文件进度消息
 
     private ResponseHandler handler;//自定义Handler
     private ILeanCloudListener listener;//数据接口
@@ -67,6 +69,16 @@ public class LeanCloudHandler implements LeanCloudHandlerInterface {
                     listener.onFailure(0, new AVException(0, "请求失败"));
                 }
                 break;
+            case FILE_PROGRESS_MESSAGE:
+                response = (Object[]) message.obj;
+                if (response != null){
+                    listener.onFileProgress((Integer)response[0],(Integer)response[1]);
+                }else {
+                    listener.onFailure(0, new AVException(0, "请求失败"));
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -83,6 +95,11 @@ public class LeanCloudHandler implements LeanCloudHandlerInterface {
     @Override
     public void sendSuccessMessage(int requestId,List<AVObject> list) {
         sendMessage(obtainMessage(SUCCESS_MESSAGE, new Object[]{requestId,list}));
+    }
+
+    @Override
+    public void sendFileProgressMessage(int requestId,Integer integer) {
+        sendMessage(obtainMessage(FILE_PROGRESS_MESSAGE,new Object[]{requestId,integer}));
     }
 
     /**
