@@ -15,15 +15,15 @@ public class SheTuan extends AVObject{
     public String like;
 
     public String getName() {
-        return name;
+        return (String) get("name");
     }
 
     public String getIntroduce() {
-        return introduce;
+        return (String) get("introduce");
     }
 
     public String getLike() {
-        return like;
+        return (String) get("like");
     }
 
 }

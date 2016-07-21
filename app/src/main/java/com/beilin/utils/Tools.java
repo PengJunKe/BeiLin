@@ -1,20 +1,17 @@
-package com.beilin.tools;
+package com.beilin.utils;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.AVObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 /**
  * Created by Lenovo on 2016/5/2.
@@ -79,19 +76,29 @@ public class Tools {
         return JSONObject.toJSONString(needObject);
     }
 
+
     /**
      * 将Bitmap转换成字节数组
-     * @param bitmap Bitmap的图片
-     * @param uri uri地址
-     * @return 字节数组
+     * @param imageView
+     * @param <T>
+     * @return
      */
-    public static byte[] getByteArrayFromUri(Bitmap bitmap, Uri uri){
+    public static <T extends ImageView>byte[] getByteArrayFromUri(T imageView){
         byte[] result = null;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Bitmap bitmap = (Bitmap) imageView.getTag();
         if (bitmap != null){
             bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
             result = baos.toByteArray();
         }
         return result;
+    }
+
+    /**
+     *
+     * @param s
+     */
+    public static void printLog(String s){
+        Log.e("TAG",s);
     }
 }

@@ -1,8 +1,10 @@
-package com.beilin.leancloud;
+package com.beilin.leancloud.response;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.DeleteCallback;
-import com.beilin.request.IRequest;
+import com.beilin.leancloud.LeanCloudHandler;
+import com.beilin.leancloud.request.IRequest;
+import com.beilin.utils.Tools;
 
 /**
  * Created by Lenovo on 2016/5/21.
@@ -34,8 +36,10 @@ public class LeanCloudDeleteResponse extends DeleteCallback {
     @Override
     public void done(AVException e) {
         if (e == null){
+            Tools.printLog("--------LeanCloudDeleteResponse----------sendSuccessMessage---------");
             handler.sendSuccessMessage(request.getRequestId(),null);
         }else {
+            Tools.printLog("--------LeanCloudDeleteResponse----------sendSuccessMessage---------");
             handler.sendFailureMessage(request.getRequestId(),e);
         }
     }

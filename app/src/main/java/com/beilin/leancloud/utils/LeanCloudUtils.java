@@ -1,4 +1,4 @@
-package com.beilin.tools;
+package com.beilin.leancloud.utils;
 
 import com.avos.avoscloud.AVObject;
 
@@ -12,7 +12,26 @@ import java.util.Map;
  *
  * @author ChengTao
  */
-public class Table {
+@SuppressWarnings("ALL")
+public class LeanCloudUtils {
+
+    public enum RequestWay{
+        INSERT,
+        DELETE,
+        UPDATE,
+        QUERY,
+        FILE,
+        LOGIN,
+        SIGNIN;
+    };
+
+    public enum QueryArg{
+        LIMIT,
+        SKIP,
+        CURRENT_PAGE;
+    }
+
+
     //LeanCloud数据库中的表名
     /**
      * 社团表名

@@ -10,7 +10,8 @@ import java.util.List;
  *处理结果的接口
  * @author ChengTao
  */
-public interface ILeanCloudListener {
+@SuppressWarnings("ALL")
+public interface LeanCloudListener {
     /**
      * 开始
      * @param requestId 请求Id
@@ -32,9 +33,25 @@ public interface ILeanCloudListener {
     void onSuccess(int requestId, List<AVObject> list);
 
     /**
+     * 文件上传成功
+     * @param requestId
+     * @param position
+     */
+    void onFileSuccess(int requestId,int position);
+
+    /**
+     * 文件上传失败
+     * @param requestId
+     * @param e
+     * @param position
+     */
+    void onFileFailure(int requestId,AVException e,int position);
+
+    /**
      * 文件上传进度
      * @param requestId 请求Id
      * @param integer 文件上传进度值
+     * @param position
      */
-    void onFileProgress(int requestId,Integer integer);
+    void onFileProgress(int requestId,Integer integer,int position);
 }

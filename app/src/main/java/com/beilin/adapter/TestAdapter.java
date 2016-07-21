@@ -2,15 +2,16 @@ package com.beilin.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVObject;
 import com.beilin.R;
-import com.beilin.entity.SheTuan;
-import com.beilin.tools.Tools;
+import com.beilin.utils.Tools;
 
 import java.util.List;
 
@@ -18,13 +19,15 @@ import java.util.List;
  * Created by ChengTao on 2016/5/23.
  * @author ChengTao
  */
+@SuppressWarnings("ALL")
 public class TestAdapter extends BaseAdapter{
-    private List<SheTuan> list;
+    private List<AVObject> list;
     private LayoutInflater layoutInflater;
 
-    public TestAdapter(Context context,List<SheTuan> list) {
+    public TestAdapter(Context context,List<AVObject> list) {
         this.list = list;
         layoutInflater = LayoutInflater.from(context);
+        Log.e("TAG","====TestAdapter===list========"+list.size()+"");
     }
 
     @Override
@@ -45,6 +48,7 @@ public class TestAdapter extends BaseAdapter{
     @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.e("TAG","==============="+list.size()+"");
         if (convertView == null){
             convertView = layoutInflater.inflate(R.layout.item,null);
         }
@@ -52,10 +56,10 @@ public class TestAdapter extends BaseAdapter{
         TextView introduce = Tools.ViewHolder.get(convertView,R.id.tv_introduce);
         TextView like = Tools.ViewHolder.get(convertView,R.id.tv_like);
 
-        SheTuan sheTuan = list.get(position);
-        name.setText(sheTuan.name);
-        introduce.setText(sheTuan.introduce);
-        like.setText(sheTuan.like);
+        AVObject sheTuan = list.get(position);
+        name.setText(sheTuan.get("name")+"");
+        introduce.setText(sheTuan.get("introduce")+"");
+        like.setText(sheTuan.get("like")+"");
         return convertView;
     }
 }

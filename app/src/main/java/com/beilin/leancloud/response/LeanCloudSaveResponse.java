@@ -1,8 +1,10 @@
-package com.beilin.leancloud;
+package com.beilin.leancloud.response;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.SaveCallback;
-import com.beilin.request.IRequest;
+import com.beilin.leancloud.LeanCloudHandler;
+import com.beilin.leancloud.request.IRequest;
+import com.beilin.utils.Tools;
 
 /**
  * Created by Lenovo on 2016/5/21.
@@ -13,7 +15,7 @@ import com.beilin.request.IRequest;
  *
  * @author ChengTao
  */
-public class LeanCloudResponse extends SaveCallback {
+public class LeanCloudSaveResponse extends SaveCallback {
     private IRequest request;//请求
     private LeanCloudHandler handler;//自定义的消息处理类
 
@@ -22,7 +24,7 @@ public class LeanCloudResponse extends SaveCallback {
      * @param request 请求
      * @param handler 自定义的消息处理类
      */
-    public LeanCloudResponse(IRequest request, LeanCloudHandler handler) {
+    public LeanCloudSaveResponse(IRequest request, LeanCloudHandler handler) {
         this.request = request;
         this.handler = handler;
     }
@@ -34,8 +36,10 @@ public class LeanCloudResponse extends SaveCallback {
     @Override
     public void done(AVException e) {
         if (e==null){
+            Tools.printLog("--------LeanCloudSaveResponse----------sendSuccessMessage---------");
             handler.sendSuccessMessage(request.getRequestId(),null);
         }else {
+            Tools.printLog("--------LeanCloudSaveResponse----------sendFailureMessage---------");
             handler.sendFailureMessage(request.getRequestId(),e);
         }
     }

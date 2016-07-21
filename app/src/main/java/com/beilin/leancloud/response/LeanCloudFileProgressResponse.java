@@ -1,7 +1,8 @@
-package com.beilin.leancloud;
+package com.beilin.leancloud.response;
 
 import com.avos.avoscloud.ProgressCallback;
-import com.beilin.request.IRequest;
+import com.beilin.leancloud.LeanCloudHandler;
+import com.beilin.leancloud.request.IRequest;
 
 /**
  * Created by ChengTao on 2016/5/26.
@@ -15,15 +16,17 @@ import com.beilin.request.IRequest;
 public class LeanCloudFileProgressResponse extends ProgressCallback{
     private IRequest request;
     private LeanCloudHandler handler;
+    private int position;
 
     /**
      * 初始化request和handler
      * @param request 请求
      * @param handler 自定义的消息处理类
      */
-    public LeanCloudFileProgressResponse(IRequest request, LeanCloudHandler handler) {
+    public LeanCloudFileProgressResponse(IRequest request, LeanCloudHandler handler,int position) {
         this.request = request;
         this.handler = handler;
+        this.position = position;
     }
 
     /**
@@ -32,10 +35,6 @@ public class LeanCloudFileProgressResponse extends ProgressCallback{
      */
     @Override
     public void done(Integer integer) {
-        handler.sendFileProgressMessage(request.getRequestId(),integer);
-        if (integer == 100){
-            request.getUploadObject().put(request.getFileKey(),request.getUploadFile());
-            request.getUploadObject().saveInBackground(new LeanCloudResponse(request,handler));
-        }
+        handler.sendFileProgressMessage(request.getRequestId(),integer,position);
     }
 }

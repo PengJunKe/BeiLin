@@ -1,9 +1,11 @@
-package com.beilin.leancloud;
+package com.beilin.leancloud.response;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.FindCallback;
-import com.beilin.request.IRequest;
+import com.beilin.leancloud.LeanCloudHandler;
+import com.beilin.leancloud.request.IRequest;
+import com.beilin.utils.Tools;
 
 import java.util.List;
 
@@ -38,8 +40,10 @@ public class LeanCloudQueryResponse extends FindCallback<AVObject> {
     @Override
     public void done(List<AVObject> list, AVException e) {
         if (e == null) {
+            Tools.printLog("--------LeanCloudQueryResponse----------sendFailureMessage---------");
             handler.sendSuccessMessage(request.getRequestId(), list);
         } else {
+            Tools.printLog("--------LeanCloudQueryResponse----------sendFailureMessage---------");
             handler.sendFailureMessage(request.getRequestId(), e);
         }
     }

@@ -11,6 +11,7 @@ import java.util.List;
  * Created by Lenovo on 2016/5/21.
  * @author ChengTao
  */
+@SuppressWarnings("JavaDoc")
 public interface LeanCloudHandlerInterface {
     /**
      * 发送开始消息
@@ -32,9 +33,23 @@ public interface LeanCloudHandlerInterface {
      */
     void sendSuccessMessage(int requestId, List<AVObject> list);
 
+
+    /**
+     * 发送文件发送成功消息
+     * @param requestId
+     */
+    void sendFileSuccessMessage(int requestId,int position);
+
+    /**
+     * 发送文件发送失败消息
+     * @param requestId
+     */
+    void sendFileFailureMessage(int requestId,AVException e,int position);
+
     /**
      * 发送文件上传进度消息
      * @param integer 文件上传进度值
      */
-    void sendFileProgressMessage(int requestId,Integer integer);
+    void sendFileProgressMessage(int requestId,Integer integer,int position);
+
 }

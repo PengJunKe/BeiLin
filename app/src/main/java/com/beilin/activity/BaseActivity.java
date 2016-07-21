@@ -2,27 +2,34 @@ package com.beilin.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
-import com.beilin.leancloud.ILeanCloudListener;
+import com.beilin.R;
+import com.beilin.leancloud.LeanCloudListener;
 import com.beilin.leancloud.LeanCloudClient;
-import com.beilin.request.IRequest;
+import com.beilin.leancloud.request.IRequest;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.List;
 
 /**
  * Created by Lenovo on 2016/5/21.
+ *
  * @author ChengTao
  */
 @SuppressWarnings("ALL")
-public abstract class BaseActivity extends Activity implements ILeanCloudListener{
-    protected String TAG = "info";
+public abstract class BaseActivity extends Activity implements LeanCloudListener {
+    protected String TAG = "TAG";
     /**
      * 主线程handler
      */
@@ -76,100 +83,110 @@ public abstract class BaseActivity extends Activity implements ILeanCloudListene
         return (T) findViewById(id);
     }
 
+
     /**
-     * 基本的查找数据
+     * 向leanColud发出请求
      *
-     * @param request 发出的请求
-     */
-    protected void baseQueryData(IRequest request) {
-        mClient.setClassName(request.getClassName());
-        mClient.baseQuery(request);
-    }
-
-    /**
-     * 基本的插入数据
-     *
-     * @param request 发出的请求
-     */
-    protected void baseInsertData(IRequest request) {
-        mClient.baseInsert(request);
-    }
-
-    /**
-     * 基本的删除数据
-     *
-     * @param request 发出的请求
-     */
-    protected void deleteData(IRequest request){
-        mClient.baseDelete(request);
-    }
-
-    /**
-     * 基本的更新数据
-     * @param request 发出的请求
-     */
-    protected void baseUpDate(IRequest request){
-        mClient.baseUpdate(request);
-    }
-
-    /**
-     * 上传有文件的对象
      * @param request
      */
-    protected void uploadObjectWithFile(IRequest request){
-        mClient.InsertWithFile(request);
+    public void leanColud(IRequest request) {
+        mClient.chooseHandleWay(request);
     }
 
     /**
      * 默认的请求失败处理
+     *
      * @param requestId 请求Id
-     * @param e 异常
+     * @param e         异常
      */
     @Override
     public void onFailure(int requestId, AVException e) {
-        Log.v(TAG,"onFailure");
-        Log.v(TAG,"e-------"+e.toString());
-        if (e.getCode() == 1){
+        Log.e(TAG, "onFailure");
+        Log.e(TAG, "e-------" + e.toString());
+        if (e.getCode() == 1) {
             showToast("您没有权限...");
-        }else {
+        } else {
             showToast("网络连接失败，请检查网路...");
         }
     }
 
     /**
      * 默认的请求开始处理
+     *
      * @param requestId 请求Id
      */
     @Override
     public void onStart(int requestId) {
-        Log.v(TAG,"onStart");
+        Log.v(TAG, "onStart");
     }
 
     /**
      * 默认的请求成功处理
+     *
      * @param requestId 请求Id
-     * @param list 返回的数据集合
+     * @param list      返回的数据集合
      */
+
     @Override
     public void onSuccess(int requestId, List<AVObject> list) {
-        Log.v(TAG,"onSuccess");
+        Log.e(TAG, "onSuccess");
+    }
+
+    /**
+     * @param requestId
+     * @param position
+     */
+    @Override
+    public void onFileSuccess(int requestId, int position) {
+        Log.e(TAG, "onFileSuccess");
+    }
+
+    /**
+     * @param requestId
+     * @param e
+     * @param position
+     */
+    @Override
+    public void onFileFailure(int requestId, AVException e, int position) {
+        Log.e(TAG, "onFileFailure");
     }
 
     /**
      * 默认文件上传进度处理
+     *
      * @param requestId 请求Id
-     * @param integer 文件上传进度值
+     * @param integer   文件上传进度值
      */
     @Override
-    public void onFileProgress(int requestId, Integer integer) {
-        Log.v(TAG,"Progress Num------"+integer);
+    public void onFileProgress(int requestId, Integer integer, int position) {
+        Log.e(TAG, "Progress Num------" + integer);
     }
 
     /**
      * 弹出吐司
+     *
      * @param s 所要展示的字符串
      */
-    protected void showToast(String s){
-        Toast.makeText(mContext,s,Toast.LENGTH_SHORT).show();
+    protected void showToast(String s) {
+        Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * @param view
+     * @param uri
+     * @param <T>
+     */
+    protected <T extends ImageView> void loadImage(final T imageView, String uri) {
+        Glide.with(this).
+                load(uri)
+                .asBitmap()
+                .centerCrop()
+                .placeholder(R.drawable.loading_spinner)
+                .into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                imageView.setImageBitmap(resource);
+                imageView.setTag(resource);            }
+        });
     }
 }

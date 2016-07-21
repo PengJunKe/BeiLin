@@ -68,16 +68,23 @@
             />
     </LinearLayout>
     <ImageView
+        android:layout_centerHorizontal="true"
         android:contentDescription="@string/_image"
         android:layout_below="@id/ll_container_file"
         android:id="@+id/iv_pic"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp" />
-    <ListView
+        android:layout_width="200dp"
+        android:layout_height="200dp" />
+    <com.beilin.view.RefreshLayout
+        android:id="@+id/sr_container"
+        android:layout_width="match_parent"
         android:layout_below="@id/iv_pic"
         android:layout_marginTop="10dp"
-        android:id="@+id/lv_main"
-        android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </ListView>
+        <ListView
+            android:id="@+id/lv_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ListView>
+    </com.beilin.view.RefreshLayout>
+
 </RelativeLayout>
